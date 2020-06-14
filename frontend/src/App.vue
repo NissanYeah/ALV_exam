@@ -22,6 +22,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">Send</el-button>
+              <span>{{message}} </span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -37,17 +38,21 @@
         form: {
           name: '',
           content: '',
-        }
+        },
+        message:''
       }
     },
     methods: {
       onSubmit() {
-        this.axios.post('/user', {
-            sender: this.name,
-            message: this.content
+        this.axios.post('https://alv-exam.herokuapp.com/mail', {
+            sender: this.form.name,
+            message: this.form.content
           })
           .then(function (response) {
             console.log(response);
+            if(response.status=='success'){
+              this.message = 'sent successful'
+            }
           })
           .catch(function (error) {
             console.log(error);

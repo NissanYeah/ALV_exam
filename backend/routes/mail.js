@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const router = express.Router()
 const nodemailer = require("nodemailer");
@@ -19,19 +20,20 @@ router.post('/' , (req, res)=>{
 
 })
 
+console.log(process.env.ACCOUNT)
 
 async function sendMail(sender,message) {
 
-  let testAccount = await nodemailer.createTestAccount();
-
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: true,
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
+      type: "OAuth2",
+      user: process.env.ACCOUNT,
+      clientId: process.env.CLINENTID,
+      clientSecret: process.env.CLINENTSECRET,
+      refreshToken: process.env.REFRESHTOKEN,
+    }
   });
 
   let info = await transporter.sendMail({

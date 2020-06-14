@@ -4,11 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "serve": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "nodemailer": "^6.4.8",
