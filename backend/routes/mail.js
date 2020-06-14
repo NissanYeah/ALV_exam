@@ -1,22 +1,23 @@
 const express = require('express')
 const router = express.Router()
 const nodemailer = require("nodemailer");
-// const admin = require("../admin").admin
-
-// var db = admin.database();
-// var ref = db.ref("user");
 
 router.post('/' , (req, res)=>{
-  console.log('trigger')
-
   
-  sender = req.sender
-  message = req.message
-  console.log(sender,message)
+  sender = req.body.sender
+  message = req.body.message
 
-  // sendMail(sender,message)
+  const result = sendMail(sender,message)
+
+  result.then((info)=>{
+    res.send({
+      "status":"success",
+      "Message sent: %s": info.messageId,
+      "Preview URL: %s":nodemailer.getTestMessageUrl(info)
+    })
+  })
+
 })
-
 
 
 async function sendMail(sender,message) {
@@ -35,14 +36,13 @@ async function sendMail(sender,message) {
 
   let info = await transporter.sendMail({
     from: sender, // sender address
-    to: "nissenyeh@gmail.com", // list of receivers
+    to: "nissenyeh@gmail.com,handeltonido@gmail.com", // list of receivers
     subject: "User's comment!", // Subject line
     text: message, // plain text body
     html: message, // html body
   });
 
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  return info
 
 }
 
